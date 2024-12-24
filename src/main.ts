@@ -13,13 +13,10 @@ import http from "node:http";
 
 
 const PORT: number = <number>(process?.env?.PORT ?? 3000);
-let httpsOptions: any = {}
-
-if (process.env?.NODE_ENV === "development") {
-  httpsOptions["key"] = fs.readFileSync(path.join(process.cwd(), "ssl_certificates", "private-key.pem"));
-  httpsOptions["cert"] = fs.readFileSync(path.join(process.cwd(), "ssl_certificates", "certificate.pem"));
+let httpsOptions: object = {
+  key: fs.readFileSync(path.join(process.cwd(), "ssl_certificates", "private-key.pem")),
+  cert: fs.readFileSync(path.join(process.cwd(), "ssl_certificates", "certificate.pem"))
 }
-
 
 
 async function bootstrap() {
