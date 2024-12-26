@@ -35,7 +35,7 @@ export const successResponse = (res: Response, statusCode: number, message: stri
 export const errorResponse = (res: Response, statusCode: number, message: string) => {
 
     const response: ErrorResponse = {
-        status: true,
+        status: false,
         status_code: statusCode || 500,
         message: message,
         data: {}

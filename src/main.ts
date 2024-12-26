@@ -42,7 +42,6 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }))
   app.useGlobalFilters(new HttpExceptionFilter());
 
-
   if (process?.env?.NODE_ENV?.toLocaleLowerCase() === "development") {
     server = http.createServer(expressServer).listen(PORT, () => {
       console.log(`Server started at 🚀 http://localhost:${PORT}`)
