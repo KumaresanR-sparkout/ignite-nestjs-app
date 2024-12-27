@@ -5,6 +5,7 @@ import { encryptHash, decryptHash } from "../utils/hash_service";
 import { errorResponse, successResponse } from 'src/utils/response_handler';
 import { ObjectIdValidationParam } from "../utils/ObjectId_dto_validation";
 import { CreateUserDto } from "./DTOS/create.user.dto";
+import { UpdateUserDto } from "./DTOS/update.user.dto";
 import { LoginUserDto } from "./DTOS/login.user.dto";
 import { UserService } from "./user.service";
 
@@ -15,7 +16,7 @@ export class UserController {
     @Post("/")
     @UsePipes(new ValidationPipe({ transform: true }))
     async getUser(@Body() createUser: CreateUserDto, @Req() req: Request, @Res() res: Response) {
-        try {
+        try {   
 
             const isExistUser: object | null = await this.userService.isExistEmail(createUser?.email)
 
@@ -85,6 +86,58 @@ export class UserController {
         catch (error) {
             console.error(error)
             return errorResponse(res, 500, "Internal server error")
+        }
+    }
+
+    @Get("")
+    async getAllUsers(@Req() req: Request, @Res() res: Response) {
+        try {
+
+            const user = await this.userService.findAllUsers();
+
+            return successResponse(res, 200, "User data fetched succesfully", user)
+        }
+        catch (error) {
+            console.error(error)
+            return errorResponse(res, 500, "Internal server error");
+        }
+    }
+
+    @Patch("/:id")
+    @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+    async updateUser(@Body() updateUser: UpdateUserDto, @Param(new ValidationPipe({ transform: true })) params: ObjectIdValidationParam, @Req() req: Request, @Res() res: Response) {
+        try {
+
+            const user = await this.userService.updateUsers(params.id, updateUser);
+
+            if (!user) {
+                return errorResponse(res, 400, "User not found");
+            }
+
+            return successResponse(res, 200, "User data updated succesfully", user)
+        }
+        catch (error) {
+            console.error(error)
+            return errorResponse(res, 500, "Internal server error");
+        }
+    }
+
+    @Delete("/:id")
+    @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+    async deleteUser(@Param(new ValidationPipe({ transform: true })) params: ObjectIdValidationParam, @Req() req: Request, @Res() res: Response) {
+        try {
+
+            const user = await this.userService.deleteUsers(params.id);
+
+            if (!user) {
+                return errorResponse(res, 400, "User not found");
+            }
+
+            return successResponse(res, 200, "User deleted succesfully", {})
+        }
+        catch (error) {
+            console.error(error)
+            return errorResponse(res, 500, "Internal server error");
         }
     }
 }

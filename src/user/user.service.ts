@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from "./Models/user.model";
 import { CreateUserDto } from "./DTOS/create.user.dto";
+import { UpdateUserDto } from "./DTOS/update.user.dto";
+
 
 
 @Injectable()
@@ -24,4 +26,20 @@ export class UserService {
         return user;
     }
 
+    async findAllUsers() {
+        const user = await this.userModel.find({}).select("-password")
+        return user;
+    }
+
+    async updateUsers(id: string, updateUser: UpdateUserDto) {
+        const user = await this.userModel.findByIdAndUpdate(id, updateUser, { new: true })
+            .select("-password")
+
+        return user
+    }
+
+    async deleteUsers(id: string) {
+        const user = await this.userModel.findByIdAndDelete(id)
+        return user
+    }
 }
