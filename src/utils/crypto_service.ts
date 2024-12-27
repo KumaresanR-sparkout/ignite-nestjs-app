@@ -1,7 +1,8 @@
 import crypto from 'node:crypto'
 
 // CONSTANTS
-const secretKey = process.env.CRYPTO_SECRET || 'acdefgerhtuwdtuvnnewhkmnbvewierr'  // the key should be 32 bytes
+// the key should be 32 bytes
+const secretKey = process.env.CRYPTO_SECRET || 'acdefgerhtuwdtuvnnewhkmnbvewierr'
 
 // This function is converting palin text to hexa decimal ecryption format
 export const encryptText = (rawData: object | string) => {
